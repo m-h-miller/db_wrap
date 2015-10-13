@@ -4,6 +4,10 @@ require 'sqlite3'
 class QuestionsDatabase < SQLite3::Database;
   include Singleton
 
+  # def self.last_insert_row_id
+  #   super
+  # end
+
   def initialize
     super('questions.db')
 
@@ -11,4 +15,5 @@ class QuestionsDatabase < SQLite3::Database;
 
     self.type_translation = true
   end
+
 end

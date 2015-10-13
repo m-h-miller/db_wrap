@@ -13,8 +13,7 @@ class Reply
         id = ?
     SQL
 
-    result.map { |result| Reply.new(result) }
-    result.first
+    result.map { |result| Reply.new(result) }.first
   end
 
   def self.find_by_user_id(user_id)
@@ -73,6 +72,30 @@ class Reply
     SQL
 
     result.map { |result| Reply.new(result) }
+  end
+
+  def save
+    if self.id.nil?
+      params = [self.subject_question_id, self.parent_reply_id,
+        self.body, self.author_id]
+      QuestionsDatabase.instance.execute(<<-SQL, *params)
+      INSERT INTO replies
+        ('subject_question_id','parent_reply_id', 'body', 'author_id')
+      VALUES
+          (?, ?, ?, ?)
+      SQL
+    else
+      params = [self.id, self.subject_question_id, self.parent_reply_id,
+        self.body, self.author_id]
+      QuestionsDatabase.instance.execute(<<-SQL, *params)
+      UPDATE replies
+        ('id', 'subject_question_id','parent_reply_id', 'body', 'author_id')
+      VALUES
+          (?, ?, ?, ?, ?)
+      SQL
+    end
+
+    self
   end
 
 end
