@@ -4,18 +4,7 @@ require_relative 'questions'
 
 
 class Question
-  def self.find_by_id(id)
-    result = QuestionsDatabase.instance.execute(<<-SQL, id)
-      SELECT
-        *
-      FROM
-        questions
-      WHERE
-        id = ?
-    SQL
-
-    result.map { |result| Question.new(result) }.first
-  end
+  TABLE = 'questions'
 
   def self.find_by_author_id(author_id)
     result = QuestionsDatabase.instance.execute(<<-SQL, author_id)

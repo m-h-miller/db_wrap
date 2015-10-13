@@ -3,18 +3,7 @@ require 'sqlite3'
 require_relative 'questions'
 
 class QuestionFollow
-  def self.find_by_id(id)
-    result = QuestionsDatabase.instance.execute(<<-SQL, id)
-      SELECT
-        *
-      FROM
-        question_follows
-      WHERE
-        id = ?
-    SQL
-
-    result.map { |result| QuestionFollow.new(result) }.first
-  end
+  TABLE = 'question_follows'
 
   def self.followers_for_question_id(question_id)
     result = QuestionsDatabase.instance.execute(<<-SQL, question_id)

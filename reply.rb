@@ -3,18 +3,7 @@ require 'sqlite3'
 require_relative 'questions'
 
 class Reply
-  def self.find_by_id(id)
-    result = QuestionsDatabase.instance.execute(<<-SQL, id)
-      SELECT
-        *
-      FROM
-        replies
-      WHERE
-        id = ?
-    SQL
-
-    result.map { |result| Reply.new(result) }.first
-  end
+  TABLE = 'replies'
 
   def self.find_by_user_id(user_id)
     result = QuestionsDatabase.instance.execute(<<-SQL, user_id)

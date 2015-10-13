@@ -4,19 +4,8 @@ require_relative 'questions'
 require 'byebug'
 
 class QuestionLike
-  def self.find_by_id(id)
-    result = QuestionsDatabase.instance.execute(<<-SQL, id)
-      SELECT
-        *
-      FROM
-        question_likes
-      WHERE
-        id = ?
-    SQL
-
-    result.map { |result| QuestionLike.new(result) }.first
-  end
-
+  TABLE = 'question_likes'
+  
   def self.likers_for_question_id(question_id)
     result = QuestionsDatabase.instance.execute(<<-SQL, question_id)
       SELECT

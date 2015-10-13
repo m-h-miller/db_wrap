@@ -5,18 +5,6 @@ require_relative 'modelbase'
 
 class User < ModelBase
   TABLE = 'users'
-  def self.find_by_id(id)
-    result = QuestionsDatabase.instance.execute(<<-SQL, id)
-      SELECT
-        *
-      FROM
-        users
-      WHERE
-        id = ?
-    SQL
-
-    result.map { |result| User.new(result) }.first
-  end
 
   def self.find_by_name(fname, lname)
     result = QuestionsDatabase.instance.execute(<<-SQL, fname, lname)
@@ -70,27 +58,28 @@ class User < ModelBase
     results.first['karma']
   end
 
-  def save
-    if self.id.nil?
-      QuestionsDatabase.instance.execute(<<-SQL, self.fname, self.lname)
-        INSERT INTO users
-          ('fname', 'lname')
-        VALUES
-            (?, ?)
-      SQL
-      @id = QuestionsDatabase.instance.last_insert_row_id
-    else
-      params = [self.id, self.fname, self.lname]
-      QuestionsDatabase.instance.execute(<<-SQL, *params)
-        UPDATE users
-          ('id', 'fname', 'lname')
-        VALUES
-          (?, ?, ?)
-      SQL
-
-    end
-
-    self
-  end
+  # def save
+  #   if self.id.nil?
+  #     QuestionsDatabase.instance.execute(<<-SQL, self.fname, self.lname)
+  #       INSERT INTO users
+  #         ('fname', 'lname')
+  #       VALUES
+  #           (?, ?)
+  #     SQL
+  #     @id = QuestionsDatabase.instance.last_insert_row_id
+  #
+  #   else
+  #     params = [self.fname, self.lname, self.id]
+  #     QuestionsDatabase.instance.execute(<<-SQL, *params)
+  #       UPDATE users
+  #       SET 'fname' = ?,
+  #           'lname' = ?
+  #       WHERE
+  #         users.id = ?
+  #     SQL
+  #   end
+  #
+  #   self
+  # end
 
 end
